@@ -1,0 +1,35 @@
+# Date description
+
+The data are from a real measurement camping in Switzerland.
+However, the coordinates are changed.
+
+All files contain time stamps and all measurements are rain
+intensities in mm/h.
+
+## Rain gauges (stations)
+
+Measure the rain intensity at one point:
+
+Station2.csv: 2085 / 3498
+Station2.csv: 2389 / 2191
+Station2.csv: 3044 / 2718
+Station4.csv: 1447 / 2924
+Station5.csv: 2125 / 989
+
+
+## Micro Wave Links (MWL)
+
+Measure the _average_ rain intensity along a path:
+
+link1.csv: (700 / 2710) to (3292 /  4252)
+link2.csv: (700 / 2710) to (1190 /  4828)
+link3.csv: (700 / 2710) to (4737 / -2148)
+
+
+## Radar
+
+The radar measures the _average_ intensity with a pixel. Each pixel
+has a extent of 1000m x 1000m.
+
+The position is defined by the file name: "Radar_xxxx_yyyy.csv" where
+xxxx and yyyy are the coordinates in m of the bottom left corner of a pixel.

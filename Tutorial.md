@@ -1,56 +1,83 @@
-Reconstruction of rain maps from microwave links and other sensors using CAIRS
-==============================================================================
+CAIRS  tutorial - reconstruction of rain maps from microwave links and other sensors
+===================================================================================
 
-October 29, 2014 - Andreas Scheidegger
+![header](images/Header.png)
 
-With rain gauges and microwave links (MWL) it is not possible not
-measure the rain field at every point in time and space.
+It is not possible to measure the rain field at every point in time
+and space with rain gauges and microwave links (MWL).
 
 Hence, some _interpolation_ between the measurements is
 required. Traditional methods to interpolate between rain gauge
 measurements are Thiessen polygons or inverse distance
 weighting. While very simple to implement, these methods do not allow
-to consider measurements uncertainty. This can be achieved with to some
-degree with Kriging approaches.
+to consider measurements uncertainty, which requires more formal
+methods such as Kriging.
 
 However, the methods mention above are designed to interpolate between
 _point_ measurements and are therefore not suitable to interpolate MWL
-measurements, which are measurements along a line. More general
-designed interpolation methods are required.
+measurements, which are measurements along a line. Therefore, more general
+ interpolation methods are needed.
 
-This tutorial demonstrates how MWL measurements can interpolates using
- CAIRS (Continuous Assimilation of Integrating Rain Sensors).  _CAIRS_
- is a framework to reconstruct (interpolate) rain fields by
+This tutorial demonstrates how MWL measurements can be interpolated using
+ _CAIRS_ (Continuous Assimilation of Integrating Rain Sensors).  _CAIRS_
+ is a general framework to reconstruct (interpolate) rain fields by
  assimilating (combining) signals of fundamentally different rain
  sensors.
 
-In particular, CAIRS considers the *integration characteristics* of
+In particular, _CAIRS_ can consider the *integration characteristics* of
 sensors explicitly. This is important because many sensors do not
-measure the rain intensity at a point in time and space but rain
-intensity integrated over time and/or space.
+measure the rain intensity at one point in time and space, but the
+rain intensity integrated over time and/or space. For example,
+non-recording standard rain gauges integrate over time and deliver
+information such as the daily rainfall sums. The rain-induced
+attenuation of micro wave links (MWL) measures the rain intensities
+integrated along a path - an example of a sensor with spatial
+integration.
 
-For example, non-recording standard rain gauges integrate over time
-and deliver information such as the daily rainfall sums. The
-rain-induced attenuation of micro wave links (MWL) measures the rain
-intensities integrated along a path - an example of a sensor with
-spatial integration.
+
+The one-dimensional example shown in the image below demonstrates the
+importance of a correct consideration of different integration
+characteristics. It shows the assimilation of a binary and an
+integrating sensor. The red curve represents the mean of the
+predictive distribution after assimilation, the gray area its
+90%-credibility region. The signal of the binary sensors provides only
+the information that the intensity is below a certain level (a). The
+integrating sensor measures the average intensity over the time-span
+indicated by the black line in b). In c) the assimilation of both
+sensors is shown. in combination the two very different signals enable
+a quite detailed reconstruction of the rain intensity. _CAIRS_
+works similar in all three dimensions (two spatial and time).
+
+![example](images/1D_example.png)
 
 
-CAIRS is very general in other respects too:
-- Sensor signals on different scales (e.g. continuous, binary) can be assimilated
-- Non-Gaussian and non-linear observation models for sensors are possible
-- A continuous formulation in time and space, i.e. the model is not
- based on fix time-steps or grid representations. This is helpful
- because it enables a natural consideration of signals with irregular
- time-intervals.
+_CAIRS_ is flexible in other respects too:
+
+- Sensor signals on different scales (e.g. continuous, binary) can be
+assimilated
+
+- Non-Gaussian and non-linear observation models for sensors are
+possible
+
+- It is basedon a continuous formulation in time and space, i.e. the
+model is not based on fix time-steps or grid representations. This
+enables a natural handling of signals with irregular time-intervals.
 
 For information on how the assimilation is done mathematically see
 [Scheidegger and Rieckermann (2014)](#publication).
 
+
+This tutorial was compiled for the [Rain Cell Africa
+Workshop](http://raincell01.sciencesconf.org/) in Ouagadougo.
+
 The reminder of this tutorial consist of:
-1. Description of the [installation](#installation) of CAIRS
+
+1. Description of the [installation](#installation) of _CAIRS_
+
 2. A first [example](#ex1) with artificial data
-3. [Demonstration](#Ex2) of the assimilation of real measurements
+
+3. A [demonstration](#ex2) of the assimilation of real measurements
+
 
 
 Installation
@@ -70,13 +97,14 @@ Pkg.clone("git://github.com/scheidan/CAIRS.jl.git")
 After that, _CAIRS_ behaves like a normal package. For example, it can
 be updated with `Pkg.update()`.
 
-One possibility to visualize the output of CAIRS is to use the
+One possibility to visualize the output of _CAIRS_ is to use the
 statistical software package [R](http://www.r-project.org/). It can be
 downloaded for free from [here](http://cran.rstudio.com/).  The R-code
 used for the visualization in this tutorial required the installation
 of two R-packages. To install the packages type in the R prompt:
 ```R
-install.packages(c("latticeExtra", "tripack")) ```
+install.packages(c("latticeExtra", "tripack"))
+```
 
 
 
@@ -99,6 +127,9 @@ about temporal and spatial correlation.
 
 5. Optional: visualize the rain field
 
+
+The reminder of this section explains how to implement this steps. All code for
+this example can be found in the file `scripts/Example_1.jl`.
 
 ### Preliminaries
 
@@ -212,7 +243,7 @@ show(sensor_MWL)
 ### Prior definition
 
 Every interpolation is based on (sometimes implicit) assumptions about
-the structure of the rain fields. CAIRS uses a formal Bayesian
+the structure of the rain fields. _CAIRS_ uses a formal Bayesian
 approach to incorporate prior knowledge about spatial and temporal
 correlations. The influence of this prior assumptions becomes smaller
 the more signals are available.
@@ -391,9 +422,9 @@ right side shows the corresponding uncertainty as standard deviation.
 
 Example with real data
 ======================
-<a name="Ex2"></a>
+<a name="ex2"></a>
 
-The file `????????.jl` has the same structure as the for the first
+The file `scripts/Example_2.jl` has the same structure as the for the first
 example. It is setup to assimilate measurement data from a campaign
 performed in a small Swiss town.
 
