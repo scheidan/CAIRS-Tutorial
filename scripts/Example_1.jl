@@ -43,8 +43,6 @@ function obs_model_gauge_binary(S::String, R::Vector)
        prob_wet = 0.10       # 10% false positives
     end
 
-    sigma = 0.1      # measurement uncertainty
-
     ## log of Bernoulli density, p(S|R)
     logpdf(Bernoulli(prob_wet), int(S=="wet"))
 end
