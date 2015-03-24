@@ -1,4 +1,4 @@
-CAIRS  tutorial - reconstruction of rain maps from microwave links and other sensors
+CAIRS  tutorial - reconstruction of rain fields from microwave links and other sensors
 ===================================================================================
 
 ![header](images/Header.png)
@@ -11,12 +11,12 @@ Introduction
 ============
 
 
-It is not possible to measure the rain field at every point in time
+It is impossible to measure the rain field at every point in time
 and space with rain gauges and microwave links (MWL).  Hence, some
 _interpolation_ between the measurements is required. Traditional
 methods to interpolate between rain gauge measurements are Thiessen
 polygons or inverse distance weighting. While very simple to
-implement, these methods do not allow to consider measurements
+implement, these methods do not allow to consider measurement
 uncertainty, which requires more formal methods such as Kriging.
 
 All the methods mention above are designed to interpolate between
@@ -27,8 +27,7 @@ measurements, which are measurements along a line. Therefore, a more general
 This tutorial demonstrates how MWL measurements can be interpolated using
  _CAIRS_ (Continuous Assimilation of Integrating Rain Sensors).  _CAIRS_
  is a general framework to reconstruct (interpolate) rain fields by
- assimilating (combining) signals of fundamentally different rain
- sensors.
+ assimilating (combining) signals of sensors that can be fundamentally different.
 
 In particular, _CAIRS_ considers the *integration characteristics* of
 sensors explicitly. This is important because many sensors do not
@@ -36,7 +35,7 @@ measure the rain intensity at one point in time and space, but the
 rain intensity integrated over time and/or space. For example,
 non-recording standard rain gauges integrate over time and deliver
 information such as the daily rainfall sums. The rain-induced
-attenuation of micro wave links (MWL) measures the rain intensities
+attenuation of microwave links (MWL) measures the rain intensities
 integrated along a path - an example of a sensor with spatial
 integration.
 
@@ -59,8 +58,8 @@ works similar in all three dimensions (two spatial and time).
 
 _CAIRS_ is flexible in other respects too:
 
-- Sensor signals on different scales (e.g. continuous, binary) can be
-assimilated
+- As shown in the example above sensor signals on different scales
+(e.g. continuous, binary) can be assimilated
 
 - Non-Gaussian and non-linear observation models for sensors are
 possible
@@ -126,11 +125,12 @@ and, if applicable,  by defining the integration domain.
 2. Define prior assumptions of the rain field, i.e. describe assumption
 about temporal and spatial correlation.
 
-3. Load the measured signals. For every signal a sensor type and the location is attached.
+3. Load the measured signals. Every signal has the corresponding
+sensor type and location attached.
 
-4. Define points for which the rain field should be interpolated.
+4. Define the points where the rain field should be interpolated.
 
-5. Optional: visualize the rain field
+5. Optional: visualize the rain field.
 
 
 The reminder of this section explains how to implement this steps. All code for
@@ -156,12 +156,12 @@ define three different sensor types: a rain gauge, a binary rain gauge, and
 a MWL.
 
 First, we assume a rain gauge that measures the rain intensity at one
-point in time and space (without integration). The first step is to
+point in time and space (i.e. without integration). We have to
 define the observation model, that is the *logarithm* of the
-conditional probability density to observe a signal give the the true
-rain intensity:
+conditional probability density to observe a signal given the true
+rain intensity
 
-log p(signal | rain intensity)
+log p(signal | rain intensity) .
 
 In _CAIRS_ this is a function that takes the signal `S` and the vector `R`
 of rain intensities as input:
@@ -173,7 +173,7 @@ function obs_model_gauge(S::Float64, R::Vector)
 
     sigma = 0.1      # measurement uncertainty
 
-     ## log of normal density, p(S|R)
+    ## log of normal density, p(S|R)
     logpdf(Normal(mu, sigma), S)
 end
 ```
@@ -211,7 +211,7 @@ specified.
 Note, in this case the observation model is _not_ conditioned on
 a rain intensity but on the integrated rain intensity `I`:
 
-log p(signal | integrated rain intensity) = p(signal | I)
+log p(signal | integrated rain intensity) = log p(signal | I)
 
 For example, a MWL with length `6` may be defined follows:
 ```julia
@@ -238,18 +238,18 @@ over time and over an area of size 5x10 would be written as:
 Sensor(obs_model_MWL, Coor(5, 10, Minute(3)))
 ```
 
-Properties of a sensor are shown with
+Properties of a sensor are shown with:
 ```Julia
 show(sensor_MWL)
 ```
 
 ### Prior definition
 
-Every interpolation is based on (often implicit) assumptions about
-the structure of the rain field. _CAIRS_ uses a formal Bayesian
-approach to incorporate prior knowledge about spatial and temporal
-correlations. The influence of this prior assumptions becomes smaller
-the more signals are available.
+Every interpolation is based on (often implicit) assumptions about the
+structure of the rain field. _CAIRS_ uses a formal Bayesian approach
+to incorporate prior knowledge about spatial and temporal
+correlations. The more signals are available the smller the influence
+of this prior assumptions becomes.
 
 The prior knowledge of the rain field is modeled as Gaussian process
 (GP). A GP is described by a mean and a covariance function.
@@ -302,8 +302,8 @@ s5 = Signal("dry", sensor_gauge_binary, Coor(3.0, 4.5, DateTime(2014, 10, 30, 13
 (Of course, in a real application such `Sensor` objects would be created programmatically.)
 
 The MWL signals are constructed in a very similar way, only that for
-sensor with spatial integration the rotation is important too. The
-figure below depicts how the locatoin of a senor must be defined: the
+sensor with spatial integration the rotation is important. The
+figure below depicts how the location of a sensor must be defined: the
 coordinates of red point have to be given together with the rotation
 angle `alpha`.
 
@@ -350,7 +350,7 @@ loc_pred = [Coor(i, j, DateTime(2014, 10, 30, 13, 00, 00))
               for i=linspace(0, 10, nn), j=linspace(0, 10, nn)]
 ```
 This produced a regular grid, but the points could also be irregularly
-distributed. For example a higher resolution might be computed for
+distributed. For example a higher resolution may be computed for
 critical areas.
 
 Also, not only predictions for coordinates but also for
@@ -360,7 +360,7 @@ minute rain sum at coordinate (1,1) the following `Domain` would be
 defined:
 ```Julia
 loc_pred = [Domain(
-                 Coor(1,1,DateTime(2014, 10, 30, 13, 00, 00)), # position
+                 Coor(1, 1, DateTime(2014, 10, 30, 13, 00, 00)), # position
                  Coor(0, 0, Minute(5)),                        # integration extent
                  0.0                                           # rotation in [rad]
            )]
@@ -403,9 +403,10 @@ output_file = "rain_map.pdf"
 ## Path to the R script shipped with CAIRS
 pathRscript = joinpath(Pkg.dir("CAIRS"), "R", "compute_rain_map.r")
 
-run(`'C:\Program Files\R\R-3.1.1\bin\Rscript' $pathRscript result_cairs.csv sensor_coor.csv $output_file`)
+run(`'C:\Program Files\R\R-3.1.1\bin\Rscript'
+     $pathRscript result_cairs.csv sensor_coor.csv $output_file`)
 ```
-Note, it is very likely that you have to adapt the path to the R executable!
+Note, it is very likely that you have to adapt the path to the R executable on your computer!
 
 The resulting rain map should look like:
 ![map](images/rain_map.png)
@@ -429,9 +430,9 @@ Example with real data
 ======================
 <a name="ex2"></a>
 
-The file `scripts/Example_2.jl` has the same structure as the one for the first
+The file `scripts/Example_2.jl` has the same structure as the one of the first
 example. It is setup to assimilate signals from a measurement campaign
-performed in a small Swiss town.
+performed in a small town in Switzerland.
 
 
 ### Signal import
@@ -450,7 +451,7 @@ The data are imported like this:
 sig = Signal[]                          # create an empty array for Signals
 
 add_signal!(sig,                        # add signal to vector 'sig'
-            filename1,                  # file name
+            "filename1.csv",            # file name
             sensor_gauge,               # sensor
             Coor(5, 6),                 # coordinate of the sensor
             date_format="d.m.yyyy HH:MM:SS",
@@ -458,7 +459,7 @@ add_signal!(sig,                        # add signal to vector 'sig'
 
 
 add_signal!(sig,
-            filename2,
+            "filename2.csv",
             sensor_MWL,                 # MWL link
             Coor(4.2, 2),               # coordinate of one end point of the sensor
             0.9,                        # rotation around the point defined above in [rad]
