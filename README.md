@@ -486,6 +486,6 @@ Publication
 =============
 <a name="Publication"></a>
 
-Scheidegger, A. and Rieckermann, J. (2014) "Bayesian assimilation of
+[Scheidegger, A. and Rieckermann, J. (2014) "Bayesian assimilation of
 rainfall sensors with fundamentally different integration
-characteristics" in WRaH Proceedings, Washington, DC.
+characteristics" in WRaH Proceedings, Washington, DC.](Scheidegger_Rieckermann_2014_Bayesian assimilation of rainfall sensors.pdf)
