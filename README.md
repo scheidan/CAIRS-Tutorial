@@ -4,7 +4,7 @@ CAIRS  tutorial - reconstruction of rain fields from microwave links and other s
 ![header](images/Header.png)
 
 This tutorial demonstrates the basic functionality of
-[_CAIRS_](https://github.com/scheidan/CAIRS.jl).
+[_CAIRS_](https://github.com/scheidan/CAIRS.jl). Download this tutorial as [pdf](https://gitprint.com/scheidan/CAIRS-Tutorial/blob/master/README.md).
 
 
 Introduction
