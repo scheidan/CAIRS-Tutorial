@@ -91,7 +91,7 @@ Installation
 _CAIRS_ is a free software under GLP license and available as [Julia](http://julialang.org/) package.
 
 The first step is to download and install
-Julia, version >= 0.3 (http://julialang.org/downloads/).
+Julia (http://julialang.org/downloads/).
 _CAIRS_ can then be installed with the Julia command `Pkg.clone()`:
 
 ```Julia
