@@ -143,7 +143,7 @@ recommended to load the packages `Dates` and `Distributions`:
 
 ```Julia
 using CAIRS
-using Dates
+using Base.Dates
 using Distributions
 ```
 
